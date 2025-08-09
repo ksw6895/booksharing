@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface TransactionDetail {
   id: string;
@@ -69,7 +70,7 @@ const ReturnProof = () => {
         .single();
 
       if (error) {
-        console.error('Error fetching transaction:', error);
+        logger.error('Error fetching transaction:', error);
         toast({
           title: "거래 정보 로딩 실패",
           description: "거래 정보를 불러올 수 없습니다.",
@@ -91,7 +92,7 @@ const ReturnProof = () => {
 
       setTransaction(data as any);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       toast({
         title: "오류가 발생했습니다",
         description: "다시 시도해 주세요.",
@@ -126,7 +127,7 @@ const ReturnProof = () => {
         .upload(fileName, imageFile);
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
+        logger.error('Upload error:', uploadError);
         return null;
       }
 
@@ -136,7 +137,7 @@ const ReturnProof = () => {
 
       return data.publicUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      logger.error('Error uploading image:', error);
       return null;
     }
   };

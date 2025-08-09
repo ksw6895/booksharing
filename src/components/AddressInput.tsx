@@ -48,7 +48,7 @@ export const AddressInput: React.FC<AddressInputProps> = ({
     // Kakao Maps API 초기화
     if (window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
-        console.log('Kakao Maps API loaded');
+        // API loaded callback
       });
     }
   }, []);
@@ -67,18 +67,30 @@ export const AddressInput: React.FC<AddressInputProps> = ({
     if (!showMap || !selectedCoordinates) return;
     if (!window.kakao || !window.kakao.maps) return;
 
+    let mapInstance: any = null;
+    let markerInstance: any = null;
+
     const renderMap = () => {
       const container = document.getElementById('kakao-map');
       if (!container) return;
+      
+      // Clean up existing map if any
+      if (mapInstance) {
+        mapInstance = null;
+      }
+      
       const center = new window.kakao.maps.LatLng(
         selectedCoordinates.lat,
         selectedCoordinates.lng
       );
-      const map = new window.kakao.maps.Map(container, {
+      mapInstance = new window.kakao.maps.Map(container, {
         center,
         level: 3,
       });
-      new window.kakao.maps.Marker({ position: center, map });
+      markerInstance = new window.kakao.maps.Marker({ 
+        position: center, 
+        map: mapInstance 
+      });
     };
 
     if (window.kakao.maps.load) {
@@ -86,6 +98,21 @@ export const AddressInput: React.FC<AddressInputProps> = ({
     } else {
       renderMap();
     }
+
+    // Cleanup function to prevent memory leaks
+    return () => {
+      if (markerInstance) {
+        markerInstance.setMap(null);
+        markerInstance = null;
+      }
+      if (mapInstance) {
+        const container = document.getElementById('kakao-map');
+        if (container) {
+          container.innerHTML = '';
+        }
+        mapInstance = null;
+      }
+    };
   }, [showMap, selectedCoordinates, isSearchOpen]);
 
   // 지역(시/도, 시/군/구) 접두사를 붙여 재검색하는 보조 함수
@@ -262,7 +289,6 @@ export const AddressInput: React.FC<AddressInputProps> = ({
         }
       });
     } catch (error) {
-      console.error('Address search error:', error);
       toast({ title: '오류', description: '주소 검색 중 오류가 발생했습니다.' });
       setLoading(false);
     }

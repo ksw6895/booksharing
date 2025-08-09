@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import logger from '@/utils/logger';
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -57,7 +58,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error fetching messages:', error);
+        logger.error('Error fetching messages:', error);
         return;
       }
 
@@ -99,7 +100,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
       setMessages(messagesWithNames);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
     }
   };
 
@@ -181,7 +182,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       });
 
     } catch (error) {
-      console.error('Error sending message:', error);
+      logger.error('Error sending message:', error);
       // 에러 시 입력창에 다시 텍스트 복원
       setNewMessage(messageText);
       toast({
@@ -222,7 +223,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       // 성공 시 모달 닫기
       onClose();
     } catch (error) {
-      console.error('Error updating transaction:', error);
+      logger.error('Error updating transaction:', error);
       toast({
         title: "오류 발생",
         description: "상태 업데이트 중 오류가 발생했습니다.",

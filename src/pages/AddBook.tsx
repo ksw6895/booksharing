@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import { ArrowLeft, Upload, BookOpen, Scan } from "lucide-react";
 import { ISBNScanner } from "@/components/ISBNScanner";
+import logger from '@/utils/logger';
 
 interface FormData {
   title: string;
@@ -59,7 +60,7 @@ const AddBook = () => {
         .upload(fileName, file);
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
+        logger.error('Upload error:', uploadError);
         return null;
       }
 
@@ -69,7 +70,7 @@ const AddBook = () => {
 
       return data.publicUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      logger.error('Error uploading image:', error);
       return null;
     }
   };
@@ -207,11 +208,11 @@ const AddBook = () => {
       });
 
       if (error) {
-        console.error('Error fetching book info:', error);
+        logger.error('Error fetching book info:', error);
         throw new Error(error.message);
       }
 
-      console.log('Book search result:', data);
+      logger.info('Book search result:', data);
       
       if (data.documents && data.documents.length > 0) {
         const book = data.documents[0];
@@ -247,7 +248,7 @@ const AddBook = () => {
         });
       }
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       toast({
         title: "오류가 발생했습니다",
         description: "책 정보를 불러오는 중 오류가 발생했습니다.",
@@ -259,7 +260,7 @@ const AddBook = () => {
   };
 
   const handleISBNScan = (isbn: string) => {
-    console.log('ISBN scanned:', isbn);
+    logger.info('ISBN scanned:', isbn);
     fetchBookInfo(isbn);
   };
 

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Star, ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface Book {
   id: string;
@@ -41,13 +42,13 @@ const BookReview = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("BookReview render:", { bookId, user: !!user, authLoading, loading });
+  logger.debug('BookReview render:', { bookId, user: !!user, authLoading, loading });
 
   useEffect(() => {
     if (authLoading) return; // Wait for auth to be determined
     
     if (!bookId) {
-      console.error("No bookId provided");
+      logger.error('No bookId provided');
       setError("잘못된 책 ID입니다.");
       setLoading(false);
       return;
@@ -55,7 +56,7 @@ const BookReview = () => {
     
     // Set up async data loading
     const loadData = async () => {
-      console.log("Loading data for bookId:", bookId);
+      logger.info('Loading data for bookId:', bookId);
       setLoading(true);
       setError(null);
       
@@ -69,7 +70,7 @@ const BookReview = () => {
           setCanReview(false);
         }
       } catch (err) {
-        console.error("Error loading book review data:", err);
+        logger.error('Error loading book review data:', err);
         setError("데이터를 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
@@ -139,7 +140,7 @@ const BookReview = () => {
     });
 
     if (error) {
-      console.error("Error checking review permission:", error);
+      logger.error('Error checking review permission:', error);
       setCanReview(false);
     } else {
       setCanReview(data);

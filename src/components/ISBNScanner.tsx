@@ -4,6 +4,7 @@ import { NotFoundException } from '@zxing/library';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Camera, X, CheckCircle, Scan } from 'lucide-react';
+import logger from '@/utils/logger';
 
 interface ISBNScannerProps {
   onScan: (isbn: string) => void;
@@ -41,7 +42,7 @@ export const ISBNScanner: React.FC<ISBNScannerProps> = ({ onScan, onClose, isOpe
         try {
           stream = await navigator.mediaDevices.getUserMedia(constraints);
         } catch (error) {
-          console.log('후면 카메라 접근 실패, 기본 카메라로 시도:', error);
+          logger.warn('후면 카메라 접근 실패, 기본 카메라로 시도:', error);
           // 더 기본적인 제약조건으로 fallback
           const fallbackConstraints = {
             video: true
@@ -81,7 +82,7 @@ export const ISBNScanner: React.FC<ISBNScannerProps> = ({ onScan, onClose, isOpe
             
             if (result && isActive) {
               const text = result.getText();
-              console.log('Scanned code:', text);
+              logger.info('Scanned code:', text);
               
               // ISBN 패턴 검증 (더 유연한 패턴)
               const cleanText = text.replace(/[-\s]/g, '');
@@ -97,7 +98,7 @@ export const ISBNScanner: React.FC<ISBNScannerProps> = ({ onScan, onClose, isOpe
           } catch (err) {
             // NotFoundException은 정상적인 상황
             if (err && !(err instanceof NotFoundException)) {
-              console.error('Scanner error:', err);
+              logger.error('Scanner error:', err);
             }
           }
           
@@ -111,7 +112,7 @@ export const ISBNScanner: React.FC<ISBNScannerProps> = ({ onScan, onClose, isOpe
         setTimeout(scanLoop, 500); // 초기 지연
 
       } catch (err) {
-        console.error('Error starting scanner:', err);
+        logger.error('Error starting scanner:', err);
         if (isActive) {
           setError('카메라에 접근할 수 없습니다. 카메라 권한을 허용해주세요.');
           setIsScanning(false);

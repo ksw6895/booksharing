@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import logger from '@/utils/logger';
 
 export interface PendingTransaction {
   id: string;
@@ -15,7 +16,7 @@ export const checkUserCanBorrow = async (userId: string): Promise<{ canBorrow: b
       .in('status', ['requested', 'in_progress']);
 
     if (error) {
-      console.error('Error checking user borrow eligibility:', error);
+      logger.error('Error checking user borrow eligibility:', error);
       return { canBorrow: true, pendingTransactions: [] }; // Allow borrowing if check fails
     }
 
@@ -24,7 +25,7 @@ export const checkUserCanBorrow = async (userId: string): Promise<{ canBorrow: b
 
     return { canBorrow, pendingTransactions };
   } catch (error) {
-    console.error('Error:', error);
+    logger.error('Error:', error);
     return { canBorrow: true, pendingTransactions: [] }; // Allow borrowing if check fails
   }
 };

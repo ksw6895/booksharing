@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface MyBook {
   id: string;
@@ -73,7 +74,7 @@ const MyPage = () => {
         .order('created_at', { ascending: false });
 
       if (booksError) {
-        console.error('Error fetching books:', booksError);
+        logger.error('Error fetching books:', booksError);
       } else {
         setMyBooks(booksData || []);
       }
@@ -100,12 +101,12 @@ const MyPage = () => {
         .order('created_at', { ascending: false });
 
       if (transactionsError) {
-        console.error('Error fetching transactions:', transactionsError);
+        logger.error('Error fetching transactions:', transactionsError);
       } else {
         setMyTransactions((transactionsData || []) as any);
       }
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       toast({
         title: "데이터 로딩 실패",
         description: "데이터를 불러올 수 없습니다.",

@@ -6,7 +6,8 @@ declare global {
   }
 }
 
-const KAKAO_SDK_URL = "//dapi.kakao.com/v2/maps/sdk.js?appkey=42c2269af0526cb8e15cc15e95efb23c&libraries=services&autoload=false";
+const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY || '';
+const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY}&libraries=services&autoload=false`;
 
 export function useKakaoMaps() {
   const [ready, setReady] = useState<boolean>(

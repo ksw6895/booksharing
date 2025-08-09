@@ -6,16 +6,17 @@ import HowItWorks from "@/components/HowItWorks";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import logger from '@/utils/logger';
 
 const Index = () => {
   useEffect(() => {
-    console.log("🏠 Index page mounted");
+    logger.info('Index page mounted');
     return () => {
-      console.log("🏠 Index page unmounted");
+      logger.info('Index page unmounted');
     };
   }, []);
 
-  console.log("🏠 Index page rendering");
+  logger.debug('Index page rendering');
 
   return (
     <div className="min-h-screen">

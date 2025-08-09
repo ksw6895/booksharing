@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface EligibleBook {
   id: string;
@@ -52,7 +53,7 @@ const RewardNotification = () => {
         .eq('transaction_type', 'rental'); // Only rental books are eligible for rewards
 
       if (booksError) {
-        console.error('Error fetching books:', booksError);
+        logger.error('Error fetching books:', booksError);
         return;
       }
 
@@ -68,7 +69,7 @@ const RewardNotification = () => {
           .eq('status', 'completed');
 
         if (transactionsError) {
-          console.error('Error fetching transactions:', transactionsError);
+          logger.error('Error fetching transactions:', transactionsError);
           continue;
         }
 
@@ -92,7 +93,7 @@ const RewardNotification = () => {
 
       setEligibleBooks(eligibleBooksData);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
     } finally {
       setLoading(false);
     }

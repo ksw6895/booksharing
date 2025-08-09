@@ -14,6 +14,7 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { ChatModal } from './ChatModal';
+import logger from '@/utils/logger';
 
 interface PendingRequest {
   id: string;
@@ -69,7 +70,7 @@ export const NotificationDropdown = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching pending requests:', error);
+        logger.error('Error fetching pending requests:', error);
         return;
       }
 
@@ -138,7 +139,7 @@ export const NotificationDropdown = () => {
 
       setPendingRequests(mappedData);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
     }
   };
 
@@ -223,7 +224,7 @@ export const NotificationDropdown = () => {
       // 요청 목록 새로고침
       fetchPendingRequests();
     } catch (error) {
-      console.error('Error updating request:', error);
+      logger.error('Error updating request:', error);
       toast({
         title: '오류가 발생했습니다',
         description: '요청 처리 중 오류가 발생했습니다.',

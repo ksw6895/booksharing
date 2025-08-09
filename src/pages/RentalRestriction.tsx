@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 import { useNavigate } from "react-router-dom"; // ★ 추가
 
 interface PendingTransaction {
@@ -50,7 +51,7 @@ const RentalRestriction = () => {
         .order('created_at', { ascending: false });
 
       if (transactionsError) {
-        console.error('Error fetching pending transactions:', transactionsError);
+        logger.error('Error fetching pending transactions:', transactionsError);
         return;
       }
 
@@ -95,7 +96,7 @@ const RentalRestriction = () => {
 
       setPendingTransactions(combinedData as any);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
     } finally {
       setLoading(false);
     }

@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { checkUserCanBorrow } from "@/lib/rentalUtils";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface BookProfile {
   display_name: string | null;
@@ -65,7 +66,7 @@ const Books = () => {
       const { data: booksData, error } = await query;
 
       if (error) {
-        console.error('Error fetching books:', error);
+        logger.error('Error fetching books:', error);
         toast({
           title: "책 목록 로딩 실패",
           description: "책 목록을 불러올 수 없습니다.",
@@ -102,7 +103,7 @@ const Books = () => {
 
       setBooks(booksWithProfiles as any);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       toast({
         title: "오류가 발생했습니다",
         description: "다시 시도해 주세요.",
@@ -177,7 +178,7 @@ const Books = () => {
         });
 
       if (messageError) {
-        console.error('Error creating initial message:', messageError);
+        logger.error('Error creating initial message:', messageError);
         // 메시지 생성 실패해도 트랜잭션은 유지
       }
 

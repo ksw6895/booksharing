@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface ReviewWithBook {
   id: string;
@@ -49,7 +50,7 @@ const PopularReviews = () => {
         .limit(20);
 
       if (reviewsError) {
-        console.error('Error fetching reviews:', reviewsError);
+        logger.error('Error fetching reviews:', reviewsError);
         return;
       }
 
@@ -94,7 +95,7 @@ const PopularReviews = () => {
 
       setReviews(combinedData.filter(r => r.book) as ReviewWithBook[]);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
     } finally {
       setLoading(false);
     }

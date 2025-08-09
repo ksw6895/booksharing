@@ -10,6 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import { Book } from "lucide-react";
 import { AddressInput } from "@/components/AddressInput";
 import { useAuth } from "@/hooks/useAuth";
+import logger from '@/utils/logger';
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -83,7 +84,7 @@ const Auth = () => {
           .eq('user_id', authData.user.id);
 
         if (profileError) {
-          console.error('Profile update error:', profileError);
+          logger.error('Profile update error:', profileError);
           // 프로필 업데이트 실패해도 회원가입은 성공으로 처리
         }
       }
@@ -133,7 +134,7 @@ const Auth = () => {
           title: "로그인 성공",
           description: "환영합니다!",
         });
-        console.log("🔐 Login successful, navigating to /books");
+        logger.info('Login successful, navigating to /books');
         navigate("/books");
       }
     } catch (error) {

@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { checkUserCanBorrow } from "@/lib/rentalUtils";
 import Header from "@/components/Header";
+import logger from '@/utils/logger';
 
 interface BookDetail {
   id: string;
@@ -74,7 +75,7 @@ const BookDetail = () => {
         .single();
 
       if (bookError) {
-        console.error('Error fetching book:', bookError);
+        logger.error('Error fetching book:', bookError);
         toast({
           title: "책 정보 로딩 실패",
           description: "책 정보를 불러올 수 없습니다.",
@@ -101,7 +102,7 @@ const BookDetail = () => {
         }
       }
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       toast({
         title: "오류가 발생했습니다",
         description: "다시 시도해 주세요.",
@@ -178,7 +179,7 @@ const BookDetail = () => {
         });
 
       if (messageError) {
-        console.error('Error creating initial message:', messageError);
+        logger.error('Error creating initial message:', messageError);
         // 메시지 생성 실패해도 트랜잭션은 유지
       }
 
@@ -453,7 +454,7 @@ const BookDetail = () => {
                   size="lg"
                   className="w-full"
                   onClick={() => {
-                    console.log("Navigating to review page:", `/books/${book.id}/review`);
+                    logger.info('Navigating to review page:', `/books/${book.id}/review`);
                     navigate(`/books/${book.id}/review`);
                   }}
                 >
